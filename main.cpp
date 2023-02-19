@@ -29,8 +29,8 @@ void run_find_user(SocialGraph &graph) {
 
     for (int i = 0; i < 5; i++) {
         std::cout << "Benchmark findUsers no filters, no sort, limit=" << (2 << (4 * i)) << ": "
-                  << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                  << measure<std::chrono::nanoseconds>::execution([&]() {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = false;
@@ -45,18 +45,18 @@ void run_find_user(SocialGraph &graph) {
                              city.active = false;
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
                      })
-                  << " ms" << std::endl;
+                  << " ns" << std::endl;
     }
 
     for (int i = 0; i < 5; i++) {
         std::cout << "Benchmark findUsers with age and city filters, no sort, limit=" << (2 << (4 * i)) << ": "
                   << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = false;
@@ -81,7 +81,7 @@ void run_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -92,7 +92,7 @@ void run_find_user(SocialGraph &graph) {
     for (int i = 0; i < 5; i++) {
         std::cout << "Benchmark findUsers with age and city filters, no sort, limit=" << (2 << (4 * i)) << ": "
                   << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = false;
@@ -117,7 +117,7 @@ void run_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -128,7 +128,7 @@ void run_find_user(SocialGraph &graph) {
     for (int i = 0; i < 5; i++) {
         std::cout << "Benchmark findUsers with age and city filters, name sort, limit=" << (2 << (4 * i)) << ": "
                   << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = false;
@@ -152,7 +152,7 @@ void run_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
                              city.cities.push_back(random_city());
 
-                             auto response = graph.findUsers(100, name, age, gender, city, SortBy_Name, 2 << (4 * i));
+                             auto response = graph.findUsers(100, name, age, gender, city, SortBy::Name, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -164,7 +164,7 @@ void run_find_user(SocialGraph &graph) {
         std::cout << "Benchmark findUsers with age and city filters, relevance "
                      "sort, limit="
                   << (2 << (4 * i)) << ": " << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = false;
@@ -189,7 +189,7 @@ void run_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_Relevance, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::Relevance, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -204,7 +204,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
         std::cout << "Benchmark findUsers high selective name, gender filter, no "
                      "sort, limit="
                   << (2 << (4 * i)) << ": " << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = true;
@@ -221,7 +221,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
                              city.active = false;
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -233,7 +233,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
         std::cout << "Benchmark findUsers high selective with age, city and gender "
                      "filters, no sort, limit="
                   << (2 << (4 * i)) << ": " << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = false;
@@ -259,7 +259,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -271,7 +271,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
         std::cout << "Benchmark findUsers high selective with age and city "
                      "filters, name sort, limit="
                   << (2 << (4 * i)) << ": " << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = false;
@@ -290,7 +290,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
                              city.cities.push_back(random_city());
 
-                             auto response = graph.findUsers(100, name, age, gender, city, SortBy_Name, 2 << (4 * i));
+                             auto response = graph.findUsers(100, name, age, gender, city, SortBy::Name, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -302,7 +302,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
         std::cout << "Benchmark findUsers high selective with age and city "
                      "filters, relevance sort, limit="
                   << (2 << (4 * i)) << ": " << measure<std::chrono::milliseconds>::execution([&]() {
-                         for (int i = 0; i < 10; i++) {
+                         for (int j = 0; j < 10; j++) {
 
                              NameFilter name;
                              name.active = false;
@@ -322,7 +322,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_Relevance, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::Relevance, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }

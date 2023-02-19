@@ -2,53 +2,53 @@
 
 | test | fast | dummy |
 |-|-|-|
-|getUser| 29746200 ns | 32603500 ns |
-|addFriend| 2620600 ns | 16230500 ns |
+|getUser| 5325645800 ns | 32603500 ns |
+|addFriend| 19117600 ns | 16230500 ns |
 
 | findUsers | fast | dummy |
 |-|-|-|
-| no filters, no sort, limit=2| 2370 ms | 3475 ms |
-| no filters, no sort, limit=32| 2440 ms | 3388 ms |
-| no filters, no sort, limit=512| 2404 ms | 3435 ms |
-| no filters, no sort, limit=8192| 2397 ms | 3332 ms |
-| no filters, no sort, limit=131072| 2810 ms | 3389 ms |
-| with age and city filters, no sort, limit=2| 2845 ms | 3485 ms |
-| with age and city filters, no sort, limit=32| 2492 ms | 3514 ms |
-| with age and city filters, no sort, limit=512| 2461 ms | 3480 ms |
-| with age and city filters, no sort, limit=8192| 2445 ms | 3491 ms |
-| with age and city filters, no sort, limit=131072| 2456 ms | 3512 ms |
-| with age and city filters, no sort, limit=2| 2360 ms | 3460 ms |
-| with age and city filters, no sort, limit=32| 2476 ms | 3490 ms |
-| with age and city filters, no sort, limit=512| 2459 ms | 3509 ms |
-| with age and city filters, no sort, limit=8192| 2463 ms | 3590 ms |
-| with age and city filters, no sort, limit=131072| 2480 ms | 3519 ms |
-| with age and city filters, name sort, limit=2| 4972 ms | 5137 ms |
-| with age and city filters, name sort, limit=32| 4971 ms | 5243 ms |
-| with age and city filters, name sort, limit=512| 5014 ms | 5153 ms |
-| with age and city filters, name sort, limit=8192| 4936 ms | 5177 ms |
-| with age and city filters, name sort, limit=131072| 5079 ms | 5377 ms |
-| with age and city filters, relevance sort, limit=2| 2610 ms | - |
-| with age and city filters, relevance sort, limit=32| 2653 ms | - |
-| with age and city filters, relevance sort, limit=512| 2688 ms | - |
-| with age and city filters, relevance sort, limit=8192| 2673 ms | - |
-| with age and city filters, relevance sort, limit=131072| 2641 ms | - |
-| high selective name, gender filter, no sort, limit=2| 2391 ms | 3305 ms |
-| high selective name, gender filter, no sort, limit=32| 2432 ms | 3508 ms |
-| high selective name, gender filter, no sort, limit=512| 2420 ms | 3332 ms |
-| high selective name, gender filter, no sort, limit=8192| 2404 ms | 3311 ms |
-| high selective name, gender filter, no sort, limit=131072| 2371 ms | 3398 ms |
-| high selective with age, city and gender filters, no sort, limit=2 | 2362 ms | 3377 ms |
-| high selective with age, city and gender filters, no sort, limit=32 | 2409 ms | 3398 ms |
-| high selective with age, city and gender filters, no sort, limit=512 | 2442 ms | 3345 ms |
-| high selective with age, city and gender filters, no sort, limit=8192 | 2410 ms | 3382 ms |
-| high selective with age, city and gender filters, no sort, limit=131072 |2429 ms | 3362 ms |
-| high selective with age and city filters, name sort, limit=2 |2515 ms | 3417 ms |
-| high selective with age and city filters, name sort, limit=32 |2397 ms | 3397 ms |
-| high selective with age and city filters, name sort, limit=512 |2495 ms | 3428 ms |
-| high selective with age and city filters, name sort, limit=8192| 2471 ms | 3404 ms |
-| high selective with age and city filters, name sort, limit=131072| 2476 ms | 3422 ms |
-| high selective with age and city filters, relevance sort, limit=2| 2368 ms | - |
-| high selective with age and city filters, relevance sort, limit=32| 2411 ms | - |
-| high selective with age and city filters, relevance sort, limit=512| 2417 ms | - |
-| high selective with age and city filters, relevance sort, limit=8192| 2444 ms | - |
-| high selective with age and city filters, relevance sort, limit=131072| 2430 ms | - |
+| no filters, no sort, limit=2| 29100 ns | 1084 ms |
+| no filters, no sort, limit=32| 23300 ns | 1051 ms |
+| no filters, no sort, limit=512| 141300 ns | 1053 ms |
+| no filters, no sort, limit=8192| 1923800 ns | 1052 ms |
+| no filters, no sort, limit=131072| 25361800 ns | 85 ms |
+| with age and city filters, no sort, limit=2| 85 ms | 1205 ms |
+| with age and city filters, no sort, limit=32| 87 ms | 1223 ms |
+| with age and city filters, no sort, limit=512| 84 ms | 1212 ms |
+| with age and city filters, no sort, limit=8192| 85 ms | 1208 ms |
+| with age and city filters, no sort, limit=131072| 94 ms | 1209 ms |
+| with age and city filters, no sort, limit=2| 96 ms | 1215 ms |
+| with age and city filters, no sort, limit=32| 86 ms | 1207 ms |
+| with age and city filters, no sort, limit=512| 87 ms | 1196 ms |
+| with age and city filters, no sort, limit=8192| 85 ms | 1218 ms |
+| with age and city filters, no sort, limit=131072| 90 ms | 1237 ms |
+| with age and city filters, name sort, limit=2| 115 ms | 2903 ms |
+| with age and city filters, name sort, limit=32| 116 ms | 2948 ms |
+| with age and city filters, name sort, limit=512| 116 ms | 2930 ms |
+| with age and city filters, name sort, limit=8192| 117 ms | 2913 ms |
+| with age and city filters, name sort, limit=131072| 124 ms | 3003 ms |
+| with age and city filters, relevance sort, limit=2| 11741 ms | - |
+| with age and city filters, relevance sort, limit=32| 12420 ms | - |
+| with age and city filters, relevance sort, limit=512| 13092 ms | - |
+| with age and city filters, relevance sort, limit=8192| 12347 ms | - |
+| with age and city filters, relevance sort, limit=131072| 12431 ms | - |
+| high selective name, gender filter, no sort, limit=2| 10 ms | 1045 ms |
+| high selective name, gender filter, no sort, limit=32| 10 ms | 1027 ms |
+| high selective name, gender filter, no sort, limit=512| 10 ms | 1026 ms |
+| high selective name, gender filter, no sort, limit=8192| 9 ms | 1031 ms |
+| high selective name, gender filter, no sort, limit=131072| 8 ms | 1045 ms |
+| high selective with age, city and gender filters, no sort, limit=2 | 24 ms | 1050 ms |
+| high selective with age, city and gender filters, no sort, limit=32 | 23 ms | 1089 ms |
+| high selective with age, city and gender filters, no sort, limit=512 | 23 ms | 1043 ms |
+| high selective with age, city and gender filters, no sort, limit=8192 | 23 ms | 1036 ms |
+| high selective with age, city and gender filters, no sort, limit=131072 | 23 ms | 1054 ms |
+| high selective with age and city filters, name sort, limit=2 | 13 ms | 1146 ms |
+| high selective with age and city filters, name sort, limit=32 | 13 ms | 1137 ms |
+| high selective with age and city filters, name sort, limit=512 | 12 ms | 1139 ms |
+| high selective with age and city filters, name sort, limit=8192| 12 ms | 1126 ms |
+| high selective with age and city filters, name sort, limit=131072| 17 ms | 1162 ms |
+| high selective with age and city filters, relevance sort, limit=2| 685 ms | 67575 ms |
+| high selective with age and city filters, relevance sort, limit=32| 750 ms | 67908 ms |
+| high selective with age and city filters, relevance sort, limit=512| 772 ms | 68043 ms |
+| high selective with age and city filters, relevance sort, limit=8192| 730 ms | 68241 ms |
+| high selective with age and city filters, relevance sort, limit=131072| 723 ms | 57296 ms |

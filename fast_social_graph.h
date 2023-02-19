@@ -1,10 +1,8 @@
 #pragma once
 #include "social_graph.h"
 #include <algorithm>
-#include <iostream>
 #include <iterator>
 #include <unordered_map>
-#include <unordered_set>
 
 struct FastSocialGraphUser {
     std::string name;
@@ -44,11 +42,11 @@ class FastSocialGraph : public SocialGraph {
         if (userId == friendId) {
             return;
         }
-        auto &current_user = users[userId];
-        if (!current_user.friends.contains(friendId)) {
-            return;
-        }
-        current_user.friends.insert(friendId);
+        // auto &current_user = users[userId];
+        // if (!current_user.friends.contains(friendId)) {
+        //     return;
+        // }
+        users[userId].friends.insert(friendId);
         users[friendId].friends.insert(userId);
     }
 
@@ -125,34 +123,26 @@ class FastSocialGraph : public SocialGraph {
             }
         }
         if (!filter_used) {
-            size_t size = users.size();
+            size_t size = sortBy == SortBy::DontSort ? std::min(limit, users.size()) : users.size();
             filteredUsers.reserve(size);
             for (size_t i = 0; i < size; ++i)
                 filteredUsers.push_back(i);
         }
 
-        if (sortBy != SortBy_DontSort) {
-            std::sort(filteredUsers.begin(), filteredUsers.end(), [this, userId, sortBy](auto u1, auto u2) {
-                auto user1 = users[u1];
-                auto user2 = users[u2];
-
-                if (sortBy == SortBy_Age) {
-                    return user1.age < user2.age;
-                }
-
-                if (sortBy == SortBy_Name) {
-                    return user1.name < user2.name;
-                }
-
-                if (sortBy == SortBy_Relevance) {
-                    return countRelevance(userId, user1) > countRelevance(userId, user2);
-                }
-
-                return false;
-            });
+        if (sortBy != SortBy::DontSort) {
+            if (sortBy == SortBy::Age) {
+                std::sort(filteredUsers.begin(), filteredUsers.end(),
+                          [this](auto u1, auto u2) { return users[u1].age < users[u2].age; });
+            } else if (sortBy == SortBy::Name) {
+                std::sort(filteredUsers.begin(), filteredUsers.end(),
+                          [this](auto u1, auto u2) { return users[u1].name < users[u2].name; });
+            } else if (sortBy == SortBy::Relevance) {
+                std::sort(filteredUsers.begin(), filteredUsers.end(), [this, userId](auto u1, auto u2) {
+                    return countRelevance(userId, users[u1]) > countRelevance(userId, users[u2]);
+                });
+            }
+            filteredUsers.resize(limit);
         }
-
-        filteredUsers.resize(limit);
 
         FindUsersResponse response;
         response.userIds = filteredUsers;
