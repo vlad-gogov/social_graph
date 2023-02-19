@@ -63,10 +63,10 @@ class FastSocialGraph : public SocialGraph {
                                 const GenderFilter &genderFilter, const CityFilter &cityFilter, SortBy sortBy,
                                 size_t limit) override {
         std::vector<size_t> filteredUsers;
-        bool filter_use = false;
+        bool filter_used = false;
 
         if (nameFilter.active) {
-            filter_use = true;
+            filter_used = true;
             const auto &temp = hashed_name[nameFilter.name.front()];
             const auto &name = nameFilter.name;
             for (size_t id : temp) {
@@ -76,7 +76,7 @@ class FastSocialGraph : public SocialGraph {
         }
 
         if (ageFilter.active) {
-            filter_use = true;
+            filter_used = true;
             const auto begin = ageFilter.start + 1;
             const auto last = ageFilter.end;
             std::vector<size_t> result;
@@ -95,7 +95,7 @@ class FastSocialGraph : public SocialGraph {
         }
 
         if (genderFilter.active) {
-            filter_use = true;
+            filter_used = true;
             const auto &temp = hashed_gender[genderFilter.gender];
             if (filteredUsers.empty()) {
                 filteredUsers = temp;
@@ -108,7 +108,7 @@ class FastSocialGraph : public SocialGraph {
         }
 
         if (cityFilter.active) {
-            filter_use = true;
+            filter_used = true;
             const auto &cities = cityFilter.cities;
             std::vector<size_t> result;
             for (const auto &city : cities) {
@@ -124,7 +124,7 @@ class FastSocialGraph : public SocialGraph {
                 filteredUsers.swap(temp);
             }
         }
-        if (!filter_use) {
+        if (!filter_used) {
             size_t size = users.size();
             filteredUsers.reserve(size);
             for (size_t i = 0; i < size; ++i)
