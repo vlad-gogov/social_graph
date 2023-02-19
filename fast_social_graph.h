@@ -137,8 +137,9 @@ class FastSocialGraph : public SocialGraph {
                 std::sort(filteredUsers.begin(), filteredUsers.end(),
                           [this](auto u1, auto u2) { return users[u1].name < users[u2].name; });
             } else if (sortBy == SortBy::Relevance) {
-                std::sort(filteredUsers.begin(), filteredUsers.end(), [this, userId](auto u1, auto u2) {
-                    return countRelevance(userId, users[u1]) > countRelevance(userId, users[u2]);
+                std::unordered_map<size_t, size_t> relevancies;
+                std::sort(filteredUsers.begin(), filteredUsers.end(), [this, userId, &relevancies](auto u1, auto u2) {
+                    return countRelevance(userId, u1, relevancies) > countRelevance(userId, u2, relevancies);
                 });
             }
             filteredUsers.resize(limit);
@@ -154,14 +155,19 @@ class FastSocialGraph : public SocialGraph {
         return static_cast<size_t>(users.size());
     }
 
-    size_t countRelevance(size_t userId, const FastSocialGraphUser &user) {
+    size_t countRelevance(size_t first, size_t second, std::unordered_map<size_t, size_t> &relevancies) {
+        if (relevancies.contains(second)) {
+            return relevancies[second];
+        }
         size_t relevance = 0;
-        auto &friends = users[userId].friends;
-        for (size_t f : user.friends) {
-            if (friends.contains(f)) {
+        auto &first_friends = users[first].friends;
+        auto &second_friends = users[second].friends;
+        for (size_t f : second_friends) {
+            if (first_friends.contains(f)) {
                 ++relevance;
             }
         }
+        relevancies[second] = relevance;
         return relevance;
     }
 
