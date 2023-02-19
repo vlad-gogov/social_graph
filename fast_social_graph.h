@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <numeric>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -33,10 +34,10 @@ class FastSocialGraph : public SocialGraph {
         FastSocialGraphUser user{name, age, gender, city, {}};
         users.push_back(user);
         size_t inserted_id = users.size() - 1u;
-        hashed_name[name.front()].push_back(inserted_id);
-        hashed_gender[gender].push_back(inserted_id);
-        hashed_city[city].push_back(inserted_id);
-        hashed_age[age].push_back(inserted_id);
+        hashed_name[name.front()].insert(inserted_id);
+        hashed_gender[gender].insert(inserted_id);
+        hashed_city[city].insert(inserted_id);
+        hashed_age[age].insert(inserted_id);
         return inserted_id;
     }
 
@@ -53,7 +54,7 @@ class FastSocialGraph : public SocialGraph {
     }
 
     GetUserResponse getUser(size_t id) override {
-        FastSocialGraphUser user = users[id];
+        FastSocialGraphUser &user = users[id];
         GetUserResponse response{user.name, user.age, user.gender, user.city, user.friends};
         return response;
     }
@@ -62,16 +63,16 @@ class FastSocialGraph : public SocialGraph {
                                 const NameFilter &nameFilter, const AgeFilter &ageFilter,
                                 const GenderFilter &genderFilter, const CityFilter &cityFilter, SortBy sortBy,
                                 size_t limit) override {
-        std::vector<size_t> filteredUsers;
+        std::unordered_set<size_t> filteredId;
         bool filter_used = false;
 
         if (nameFilter.active) {
             filter_used = true;
             const auto &temp = hashed_name[nameFilter.name.front()];
             const auto &name = nameFilter.name;
-            for (size_t id : temp) {
+            for (const auto &id : temp) {
                 if (users[id].name == name)
-                    filteredUsers.push_back(id);
+                    filteredId.insert(id);
             }
         }
 
@@ -79,77 +80,69 @@ class FastSocialGraph : public SocialGraph {
             filter_used = true;
             const auto begin = ageFilter.start + 1;
             const auto last = ageFilter.end;
-            std::vector<size_t> result;
+            std::unordered_set<size_t> result;
             for (auto i = begin; i < last; ++i) {
-                result.insert(result.end(), hashed_age[i].begin(), hashed_age[i].end());
+                const auto &temp = hashed_age[i];
+                for (const auto &id : temp) {
+                    result.insert(id);
+                }
             }
-            std::sort(result.begin(), result.end());
-            if (filteredUsers.empty()) {
-                filteredUsers = result;
+            if (filteredId.empty()) {
+                filteredId.swap(result);
             } else {
-                std::vector<size_t> temp;
-                std::set_intersection(filteredUsers.begin(), filteredUsers.end(), result.begin(), result.end(),
-                                      std::back_inserter(temp));
-                filteredUsers.swap(temp);
+                filteredId = intersection(filteredId, result);
             }
         }
 
         if (genderFilter.active) {
             filter_used = true;
             const auto &temp = hashed_gender[genderFilter.gender];
-            if (filteredUsers.empty()) {
-                filteredUsers = temp;
+            if (filteredId.empty()) {
+                filteredId = temp;
             } else {
-                std::vector<size_t> result;
-                std::set_intersection(filteredUsers.begin(), filteredUsers.end(), temp.begin(), temp.end(),
-                                      std::back_inserter(result));
-                filteredUsers.swap(result);
+                filteredId = intersection(filteredId, temp);
             }
         }
 
         if (cityFilter.active) {
             filter_used = true;
             const auto &cities = cityFilter.cities;
-            std::vector<size_t> result;
+            std::unordered_set<size_t> result;
             for (const auto &city : cities) {
-                result.insert(result.end(), hashed_city[city].begin(), hashed_city[city].end());
+                for (const auto &id : city) {
+                    result.insert(id);
+                }
             }
-            std::sort(result.begin(), result.end());
-            if (filteredUsers.empty()) {
-                filteredUsers = result;
+            if (filteredId.empty()) {
+                filteredId.swap(result);
             } else {
-                std::vector<size_t> temp;
-                std::set_intersection(filteredUsers.begin(), filteredUsers.end(), result.begin(), result.end(),
-                                      std::back_inserter(temp));
-                filteredUsers.swap(temp);
+                filteredId = intersection(filteredId, result);
             }
         }
+
+        std::vector<size_t> filteredUsers;
         if (!filter_used) {
-            size_t size = users.size();
-            filteredUsers.reserve(size);
-            for (size_t i = 0; i < size; ++i)
-                filteredUsers.push_back(i);
+            filteredUsers.resize(users.size());
+            std::iota(std::begin(filteredUsers), std::end(filteredUsers), 0);
+        } else {
+            filteredUsers.reserve(filteredId.size());
+            for (const auto &id : filteredId) {
+                filteredUsers.push_back(id);
+            }
         }
 
-        if (sortBy != SortBy_DontSort) {
-            std::sort(filteredUsers.begin(), filteredUsers.end(), [this, userId, sortBy](auto u1, auto u2) {
-                auto user1 = users[u1];
-                auto user2 = users[u2];
-
-                if (sortBy == SortBy_Age) {
-                    return user1.age < user2.age;
-                }
-
-                if (sortBy == SortBy_Name) {
-                    return user1.name < user2.name;
-                }
-
-                if (sortBy == SortBy_Relevance) {
-                    return countRelevance(userId, user1) > countRelevance(userId, user2);
-                }
-
-                return false;
-            });
+        if (sortBy != SortBy::DontSort) {
+            if (sortBy == SortBy::Age) {
+                std::sort(filteredUsers.begin(), filteredUsers.end(),
+                          [this](auto u1, auto u2) { return users[u1].age < users[u2].age; });
+            } else if (sortBy == SortBy::Name) {
+                std::sort(filteredUsers.begin(), filteredUsers.end(),
+                          [this](auto u1, auto u2) { return users[u1].name < users[u2].name; });
+            } else if (sortBy == SortBy::Relevance) {
+                std::sort(filteredUsers.begin(), filteredUsers.end(), [this, userId](auto u1, auto u2) {
+                    return countRelevance(userId, users[u1]) > countRelevance(userId, users[u2]);
+                });
+            }
         }
 
         filteredUsers.resize(limit);
@@ -177,8 +170,19 @@ class FastSocialGraph : public SocialGraph {
 
   private:
     std::vector<FastSocialGraphUser> users;
-    std::unordered_map<std::string::value_type, std::vector<size_t>> hashed_name;
-    std::unordered_map<Gender, std::vector<size_t>> hashed_gender;
-    std::unordered_map<std::string, std::vector<size_t>> hashed_city;
-    std::vector<std::vector<size_t>> hashed_age;
+    std::unordered_map<std::string::value_type, std::unordered_set<size_t>> hashed_name;
+    std::unordered_map<Gender, std::unordered_set<size_t>> hashed_gender;
+    std::unordered_map<std::string, std::unordered_set<size_t>> hashed_city;
+    std::vector<std::unordered_set<size_t>> hashed_age;
+
+    std::unordered_set<size_t> intersection(const std::unordered_set<size_t> &first,
+                                            const std::unordered_set<size_t> &second) {
+        std::unordered_set<size_t> result;
+        for (const auto &id : first) {
+            if (second.contains(id)) {
+                result.insert(id);
+            }
+        }
+        return result;
+    }
 };

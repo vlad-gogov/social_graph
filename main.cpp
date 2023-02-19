@@ -45,7 +45,7 @@ void run_find_user(SocialGraph &graph) {
                              city.active = false;
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -81,7 +81,7 @@ void run_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -117,7 +117,7 @@ void run_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -152,7 +152,7 @@ void run_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
                              city.cities.push_back(random_city());
 
-                             auto response = graph.findUsers(100, name, age, gender, city, SortBy_Name, 2 << (4 * i));
+                             auto response = graph.findUsers(100, name, age, gender, city, SortBy::Name, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -189,7 +189,7 @@ void run_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_Relevance, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::Relevance, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -221,7 +221,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
                              city.active = false;
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -259,7 +259,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_DontSort, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::DontSort, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -290,7 +290,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
                              city.cities.push_back(random_city());
 
-                             auto response = graph.findUsers(100, name, age, gender, city, SortBy_Name, 2 << (4 * i));
+                             auto response = graph.findUsers(100, name, age, gender, city, SortBy::Name, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }
@@ -322,7 +322,7 @@ void run_high_selective_find_user(SocialGraph &graph) {
                              city.cities.push_back(random_city());
 
                              auto response =
-                                 graph.findUsers(100, name, age, gender, city, SortBy_Relevance, 2 << (4 * i));
+                                 graph.findUsers(100, name, age, gender, city, SortBy::Relevance, 2 << (4 * i));
 
                              assert(response.userIds.size() > 0);
                          }

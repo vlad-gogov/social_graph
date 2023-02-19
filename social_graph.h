@@ -73,11 +73,11 @@ struct CityFilter {
     std::vector<std::string> cities;
 };
 
-enum SortBy {
-    SortBy_DontSort,
-    SortBy_Name,
-    SortBy_Age,
-    SortBy_Relevance,
+enum class SortBy {
+    DontSort,
+    Name,
+    Age,
+    Relevance,
 };
 
 class SocialGraph {
