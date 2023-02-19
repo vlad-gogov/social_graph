@@ -45,11 +45,11 @@ class FastSocialGraph : public SocialGraph {
         if (userId == friendId) {
             return;
         }
-        auto &current_user = users[userId];
-        if (!current_user.friends.contains(friendId)) {
-            return;
-        }
-        current_user.friends.insert(friendId);
+        // auto &current_user = users[userId];
+        // if (current_user.friends.contains(friendId)) {
+        //     return;
+        // }
+        users[userId].friends.insert(friendId);
         users[friendId].friends.insert(userId);
     }
 
@@ -122,7 +122,8 @@ class FastSocialGraph : public SocialGraph {
 
         std::vector<size_t> filteredUsers;
         if (!filter_used) {
-            filteredUsers.resize(users.size());
+            size_t size = sortBy == SortBy::DontSort ? std::min(limit, users.size()) : users.size();
+            filteredUsers.resize(sortBy == SortBy::DontSort ? std::min(limit, users.size()) : users.size());
             std::iota(std::begin(filteredUsers), std::end(filteredUsers), 0);
         } else {
             filteredUsers.reserve(filteredId.size());
@@ -143,9 +144,8 @@ class FastSocialGraph : public SocialGraph {
                     return countRelevance(userId, users[u1]) > countRelevance(userId, users[u2]);
                 });
             }
+            filteredUsers.resize(limit);
         }
-
-        filteredUsers.resize(limit);
 
         FindUsersResponse response;
         response.userIds = filteredUsers;
